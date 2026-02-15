@@ -1,6 +1,9 @@
 # Stage 1: Build frontend
 FROM node:20-alpine AS frontend-builder
 
+# Install build dependencies for native modules
+RUN apk add --no-cache python3 make g++
+
 WORKDIR /build
 
 # Copy client package files
@@ -19,10 +22,14 @@ RUN npm run build
 # Stage 2: Production image
 FROM node:20-alpine
 
-# Install required packages
+# Install required packages and build dependencies for native modules
 RUN apk add --no-cache \
     bash \
-    sqlite
+    jq \
+    sqlite \
+    python3 \
+    make \
+    g++
 
 WORKDIR /app
 
