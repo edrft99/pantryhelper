@@ -1,5 +1,14 @@
 {
   "name": "PantryHelper Add-on Repository",
   "url": "https://github.com/edrft99/pantryhelper",
-  "maintainer": "edrft99"
+  "maintainer": "edrft99",
+  "addons": [
+    {
+      "slug": "pantryhelper",
+      "name": "PantryHelper",
+      "description": "AI-powered pantry management and recipe suggestions",
+      "version": "1.0.0",
+      "url": "https://github.com/edrft99/pantryhelper/tree/main/pantryhelper"
+    }
+  ]
 }
