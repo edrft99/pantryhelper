@@ -1,0 +1,20 @@
+<svg width="256" height="256" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="256" height="256" fill="#41BDF5" rx="32"/>
+  
+  <!-- Fridge/Pantry Icon -->
+  <rect x="64" y="48" width="128" height="160" fill="white" rx="8"/>
+  <rect x="72" y="56" width="112" height="144" fill="#E3F2FD" rx="4"/>
+  
+  <!-- Shelf lines -->
+  <line x1="72" y1="100" x2="184" y2="100" stroke="#90CAF9" stroke-width="2"/>
+  <line x1="72" y1="144" x2="184" y2="144" stroke="#90CAF9" stroke-width="2"/>
+  
+  <!-- Door handle -->
+  <rect x="168" y="120" width="12" height="32" fill="#64B5F6" rx="2"/>
+  
+  <!-- AI Sparkle -->
+  <circle cx="208" cy="64" r="24" fill="#FFD700"/>
+  <path d="M208,48 L210,60 L220,58 L212,68 L222,76 L210,74 L208,86 L206,74 L194,76 L204,68 L196,58 L206,60 Z" 
+        fill="white"/>
+</svg>

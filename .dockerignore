@@ -1,0 +1,36 @@
+# Ignore development files
+node_modules/
+.git/
+.gitignore
+.env
+.env.local
+
+# Ignore build artifacts
+client/dist/
+*.log
+npm-debug.log*
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore test files
+*.test.js
+*.spec.js
+__tests__/
+
+# Ignore documentation (included separately)
+ROADMAP.md
+ICON_INSTRUCTIONS.md
+
+# Ignore database files (created at runtime)
+*.db
+*.db-shm
+*.db-wal
+server/db/*.db

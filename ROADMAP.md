@@ -298,6 +298,106 @@ Add Spoonacular as a third recipe source alongside TheMealDB and OpenAI. Spoonac
 - MODIFIED: `client/src/components/RecipeCard.jsx` — add orange badge for Spoonacular source
 - MODIFIED: `client/src/pages/RecipesPage.jsx` — show Spoonacular count in metadata banner
 
+## Phase 11: Home Assistant Addon - IN PROGRESS
+Convert PantryHelper into a Home Assistant addon with Ingress support for seamless integration. Deploy to GitHub repository for installation on HA Green (aarch64).
+
+**Goal**: Run PantryHelper as a native HA addon accessible via the HA UI panel, with persistent data storage and user-configurable API keys.
+
+**Architecture Changes**:
+- Single Express server serving both static frontend and API routes
+- HA Ingress integration with `X-Ingress-Path` header handling
+- Data persistence in `/data/` directory (included in HA snapshots)
+- Configuration via HA options UI instead of `.env` file
+- Multi-stage Docker build for production optimization
+
+**Implementation Tasks**:
+
+- [ ] Create addon manifest (`config.json`)
+  - Define metadata: name "PantryHelper", slug `pantryhelper`, version `1.0.0`
+  - Set architectures: `["aarch64", "amd64"]` (HA Green + testing)
+  - Configure ingress with panel icon and title
+  - Define options schema: `OPENAI_API_KEY` (required), `MEALIE_URL`, `MEALIE_API_TOKEN` (optional)
+  - Set startup type `application`, boot `auto`
+
+- [ ] Create multi-stage Dockerfile
+  - Stage 1: Build frontend with `node:20-alpine`, run `npm ci && npm run build` in `client/`
+  - Stage 2: Production image, copy server code and built frontend
+  - Install production dependencies only (`npm ci --production`)
+  - Expose port 3001, set entrypoint to `node server/index.js`
+
+- [ ] Create startup script (`run.sh`)
+  - Read `/data/options.json` and export to environment variables
+  - Validate `OPENAI_API_KEY` is present
+  - Set `PORT=3001` and `NODE_ENV=production`
+  - Execute Node server
+
+- [ ] Update server for static file serving (`server/index.js`)
+  - Remove hardcoded CORS origin `http://localhost:5173`
+  - Add middleware to handle `X-Ingress-Path` header for subpath routing
+  - Add `express.static()` middleware to serve `client/dist/` at root `/` in production
+  - Update CORS to accept dynamic origins from HA ingress headers
+  - Ensure API routes registered before static middleware
+
+- [ ] Update database path for persistence (`server/db/init.js`)
+  - Change SQLite path from `server/db/pantryhelper.db` to `/data/pantryhelper.db`
+  - Add environment detection: use `/data/` in production, current path in dev
+  - Ensure `/data/` directory exists before DB init
+
+- [ ] Create addon documentation
+  - `README.md`: Brief description, features, screenshot
+  - `DOCS.md`: Installation guide (add repo to HA), configuration (OpenAI key, Mealie), usage, troubleshooting
+
+- [ ] Add build configuration (`build.json`)
+  - Define architectures: `aarch64` (HA Green), `amd64` (testing)
+  - Set base images per architecture
+
+- [ ] Prepare GitHub repository
+  - Add addon files to root: `config.json`, `Dockerfile`, `run.sh`, `build.json`, `README.md`, `DOCS.md`, `icon.png`
+  - Update this ROADMAP to mark Phase 11 complete
+  - Tag release as `v1.0.0`
+
+- [ ] Local testing
+  - Build Docker image: `docker build -t pantryhelper-test .`
+  - Run with mounted `/data` volume and test env vars
+  - Verify frontend loads, API works, database persists
+
+- [ ] Deploy to HA Green
+  - Push all changes to GitHub (`edrft99/pantryhelper`)
+  - In HA: Settings → Add-ons → Add-on Store → ⋮ → Repositories
+  - Add repository URL: `https://github.com/edrft99/pantryhelper`
+  - Find "PantryHelper" in store, install
+  - Configure OpenAI API key in addon config
+  - Start addon and access via Ingress panel
+
+**Verification Checklist**:
+- [ ] Docker image builds without errors
+- [ ] HA recognizes addon in store after repo added
+- [ ] Addon starts and shows "Started" state
+- [ ] Ingress panel loads React interface (no 404s, proper routing)
+- [ ] Image upload and scanning returns detected ingredients
+- [ ] Pantry CRUD persists after addon restart
+- [ ] Recipe search works (TheMealDB and/or OpenAI)
+- [ ] Mealie sync works if configured (optional)
+
+**Key Decisions**:
+- **Ingress over port mapping**: Better HA integration, embedded in UI panel
+- **aarch64 + amd64**: Targeting HA Green primary, amd64 for dev/testing
+- **MVP scope**: No authentication (HA provides), no multi-user, no HA camera integration yet
+- **Database in /data/**: Standard HA persistence pattern, auto-included in snapshots
+- **Production mode detection**: Use `/data/` when exists, dev path for local development
+
+**Target Hardware**: Home Assistant Green (aarch64)
+
+**Repository**: https://github.com/edrft99/pantryhelper
+
+**Future Enhancements (Phase 12+)**:
+- Multi-architecture support (armv7, armhf for older Raspberry Pi)
+- HA authentication integration
+- HA camera entity integration (use existing HA cameras)
+- HA notification integration (low stock alerts, recipe suggestions)
+- Auto-discovery of Mealie addon if installed
+- Backup/restore features beyond HA snapshots
+
 ---
 
 ## Getting Started

@@ -1,9 +1,25 @@
 import Database from 'better-sqlite3';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+import { existsSync, mkdirSync } from 'fs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const dbPath = join(__dirname, 'pantryhelper.db');
+
+// Determine database path based on environment
+// Use /data/ for Home Assistant addon, otherwise use local path
+let dbPath;
+const dataDir = '/data';
+const isProduction = process.env.NODE_ENV === 'production';
+
+if (isProduction && existsSync(dataDir)) {
+  // Production mode (Home Assistant addon)
+  dbPath = join(dataDir, 'pantryhelper.db');
+  console.log(`Using production database path: ${dbPath}`);
+} else {
+  // Development mode
+  dbPath = join(__dirname, 'pantryhelper.db');
+  console.log(`Using development database path: ${dbPath}`);
+}
 
 const db = new Database(dbPath);
 
