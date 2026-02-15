@@ -36,9 +36,10 @@ WORKDIR /app
 # Copy server package files
 COPY server/package*.json ./server/
 
-# Install production dependencies only
+# Install production dependencies and rebuild native modules for alpine
 WORKDIR /app/server
-RUN npm ci --production
+RUN npm ci --omit=dev && \
+    npm rebuild better-sqlite3 --build-from-source
 
 # Copy server source
 WORKDIR /app

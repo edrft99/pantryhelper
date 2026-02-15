@@ -29,6 +29,5 @@
     "openai_api_key": "str",
     "mealie_url": "str?",
     "mealie_api_token": "str?"
-  },
-  "image": "ghcr.io/edrft99/pantryhelper-{arch}"
+  }
 }
