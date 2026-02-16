@@ -313,6 +313,7 @@ Convert PantryHelper into a Home Assistant addon with Ingress support for seamle
 **Implementation Tasks**:
 
 - [x] Fix Ingress static asset serving — dynamically inject `<base href>` from `X-Ingress-Path` header so relative asset URLs resolve correctly through HA Ingress proxy
+- [x] Native camera support for HA mobile app — use `getUserMedia` API with live camera preview overlay instead of file input `capture` attribute (which is ignored by HA WebView)
 
 - [ ] Create addon manifest (`config.json`)
   - Define metadata: name "PantryHelper", slug `pantryhelper`, version `1.0.0`
