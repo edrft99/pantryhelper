@@ -1,6 +1,6 @@
 {
   "name": "PantryHelper",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "slug": "pantryhelper",
   "description": "AI-powered pantry management and recipe suggestions using OpenAI Vision",
   "url": "https://github.com/edrft99/pantryhelper",

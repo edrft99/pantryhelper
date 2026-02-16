@@ -312,7 +312,7 @@ Convert PantryHelper into a Home Assistant addon with Ingress support for seamle
 
 **Implementation Tasks**:
 
-- [x] Fix Ingress static asset serving — change Vite base from relative (`./`) to absolute (`/`)
+- [x] Fix Ingress static asset serving — dynamically inject `<base href>` from `X-Ingress-Path` header so relative asset URLs resolve correctly through HA Ingress proxy
 
 - [ ] Create addon manifest (`config.json`)
   - Define metadata: name "PantryHelper", slug `pantryhelper`, version `1.0.0`
