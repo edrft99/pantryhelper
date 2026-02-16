@@ -1,7 +1,8 @@
 import axios from 'axios';
 
+const ingressPath = window.__INGRESS_PATH__ || '';
 const api = axios.create({
-  baseURL: '/api'
+  baseURL: `${ingressPath}/api`
 });
 
 // Pantry
