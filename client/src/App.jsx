@@ -8,8 +8,9 @@ import PantryPage from './pages/PantryPage';
 import FavoritesPage from './pages/FavoritesPage';
 
 export default function App() {
+  const basename = window.__INGRESS_PATH__ || '';
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <Toaster position="top-center" toastOptions={{ duration: 3000 }} />
       <Routes>
         <Route element={<Layout />}>

@@ -76,9 +76,10 @@ if (isProduction) {
   app.get('*', (req, res) => {
     const ingressPath = req.headers['x-ingress-path'];
     if (ingressPath) {
-      // Inject <base href> so relative asset URLs resolve through Ingress
+      // Inject <base href> for asset URLs and ingress path for React Router
       const baseTag = `<base href="${ingressPath}/">`;
-      const html = indexHtml.replace('<head>', `<head>${baseTag}`);
+      const ingressScript = `<script>window.__INGRESS_PATH__="${ingressPath}";</script>`;
+      const html = indexHtml.replace('<head>', `<head>${baseTag}${ingressScript}`);
       res.type('html').send(html);
     } else {
       res.type('html').send(indexHtml);
